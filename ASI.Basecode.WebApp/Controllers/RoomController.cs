@@ -23,10 +23,10 @@ namespace ASI.Basecode.WebApp.Controllers
 
             if (!result)
             {
-                return View(null); // Or handle error as needed
+                return View(null); 
             }
 
-            // Filter rooms based on search term
+           
             if (!string.IsNullOrEmpty(search))
             {
                 rooms = rooms.Where(r => r.roomName.Contains(search, StringComparison.OrdinalIgnoreCase) ||
@@ -52,7 +52,7 @@ namespace ASI.Basecode.WebApp.Controllers
             catch (InvalidDataException ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
-                return View(room); // Return the same view with the model to show validation errors
+                return View(room); 
             }
         }
 
