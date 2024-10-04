@@ -36,6 +36,7 @@ namespace ASI.Basecode.WebApp
             this._services.AddScoped<IUserService, UserService>();
             this._services.AddScoped<IBookService, BookService>();
             this._services.AddScoped<IRoomService, RoomService>();
+           this._services.AddScoped<ICustomerService, CustomerService>();
 
 
 
@@ -43,6 +44,7 @@ namespace ASI.Basecode.WebApp
             this._services.AddScoped<IUserRepository, UserRepository>();
             this._services.AddScoped<iBookRepository, BookRepository>();
             this._services.AddScoped<IRoomRepository, RoomRepository>();
+            this._services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             // Manager Class
             this._services.AddScoped<SignInManager>();
