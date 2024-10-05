@@ -2,6 +2,7 @@
 using ASI.Basecode.Services.Interfaces;
 using ASI.Basecode.Services.Manager;
 using ASI.Basecode.Services.ServiceModels;
+using ASI.Basecode.Services.Services;
 using ASI.Basecode.WebApp.Authentication;
 using ASI.Basecode.WebApp.Models;
 using ASI.Basecode.WebApp.Mvc;
@@ -12,13 +13,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using static ASI.Basecode.Resources.Constants.Enums;
 
 namespace ASI.Basecode.WebApp.Controllers
 {
-    public class AccountController : ControllerBase<AccountController>
+    public class UserController : ControllerBase<UserController>
     {
         private readonly SessionManager _sessionManager;
         private readonly SignInManager _signInManager;
@@ -39,7 +42,7 @@ namespace ASI.Basecode.WebApp.Controllers
         /// <param name="mapper">The mapper.</param>
         /// <param name="tokenValidationParametersFactory">The token validation parameters factory.</param>
         /// <param name="tokenProviderOptionsFactory">The token provider options factory.</param>
-        public AccountController(
+        public UserController(
                             SignInManager signInManager,
                             IHttpContextAccessor httpContextAccessor,
                             ILoggerFactory loggerFactory,
@@ -123,13 +126,13 @@ namespace ASI.Basecode.WebApp.Controllers
             try
             {
                 _userService.AddUser(model);
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Login", "Account");
             }
-            catch(InvalidDataException ex)
+            catch (InvalidDataException ex)
             {
                 TempData["ErrorMessage"] = ex.Message;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["ErrorMessage"] = Resources.Messages.Errors.ServerError;
             }
@@ -145,6 +148,75 @@ namespace ASI.Basecode.WebApp.Controllers
         {
             await this._signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
+        }
+
+        public IActionResult Index(string search)
+        {
+            (bool result, IEnumerable<User> users) = _userService.GetUsers();
+
+            if (!result)
+            {
+                return View(null);
+            }
+
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                users = users.Where(r => r.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                                          r.Email.Contains(search, StringComparison.OrdinalIgnoreCase));
+            }
+
+            return View(users.ToList());
+        }
+        public IActionResult Delete(string UserId)
+        {
+            (bool result, IEnumerable<User> users) = _userService.GetUsers();
+            var user = users.FirstOrDefault(r => UserId == r.UserId);
+            if (user != null)
+            {
+                _userService.DeleteUser(user);
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Update(string UserId)
+        {
+            (bool result, IEnumerable<User> users) = _userService.GetUsers();
+            var user = users.FirstOrDefault(r => UserId == r.UserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult Update(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                _userService.UpdateUser(user);
+                return RedirectToAction("Index");
+            }
+            return View(user);
+        }
+
+
+       
+
+        [HttpPost]
+        public IActionResult CreateUser(User user)
+        {
+            try
+            {
+                _userService.RegisterUser(user);
+                return RedirectToAction("Index");
+            }
+            catch (InvalidDataException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                 return RedirectToAction("Index");
+            }
         }
     }
 }
