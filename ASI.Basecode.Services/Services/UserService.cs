@@ -1,10 +1,12 @@
 ﻿using ASI.Basecode.Data.Interfaces;
 using ASI.Basecode.Data.Models;
+using ASI.Basecode.Data.Repositories;
 using ASI.Basecode.Services.Interfaces;
 using ASI.Basecode.Services.Manager;
 using ASI.Basecode.Services.ServiceModels;
 using AutoMapper;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using static ASI.Basecode.Resources.Constants.Enums;
@@ -50,6 +52,60 @@ namespace ASI.Basecode.Services.Services
             {
                 throw new InvalidDataException(Resources.Messages.Errors.UserExists);
             }
+
         }
+        public (bool, IEnumerable<User>) GetUsers()
+        {
+
+            var users = _repository.ViewUsers();
+            if (users != null)
+            {
+                return (true, users);
+            }
+            return (false, null);
+        }
+        public void DeleteUser(User user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentException();
+            }
+
+
+            _repository.DeleteUser(user);
+        }
+
+        public void UpdateUser(User user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentException();
+            }
+
+
+            _repository.UpdateUser(user);
+        }
+
+        public void RegisterUser(User user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentException();
+            }
+            var newUser = new User();
+
+            newUser.Name = user.Name;
+            newUser.Email = user.Email;
+            newUser.Role = user.Role;
+            newUser.CreatedTime = DateTime.Now;
+            newUser.UpdatedTime = DateTime.Now;
+            newUser.CreatedBy = System.Environment.UserName;
+            newUser.UpdatedBy = System.Environment.UserName;
+            _repository.RegisterUser(newUser);
+
+        }
+
+
+
     }
 }
