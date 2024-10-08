@@ -25,6 +25,22 @@ namespace ASI.Basecode.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Rooms",
+                columns: table => new
+                {
+                    roomId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    roomName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    roomLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    roomCapacity = table.Column<int>(type: "int", nullable: false),
+                    availableFacilities = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rooms", x => x.roomId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -32,11 +48,13 @@ namespace ASI.Basecode.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     Name = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     CreatedBy = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    CreatedTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedBy = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    UpdatedTime = table.Column<DateTime>(type: "datetime", nullable: false)
+                    UpdatedTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    CreatedTime = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,6 +72,9 @@ namespace ASI.Basecode.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "Users");

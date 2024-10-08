@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASI.Basecode.Data.Migrations
 {
     [DbContext(typeof(AsiBasecodeDBContext))]
-    [Migration("20241001032000_RoomMigration")]
-    partial class RoomMigration
+    [Migration("20241006085554_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,8 +57,9 @@ namespace ASI.Basecode.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("roomId"), 1L, 1);
 
-                    b.Property<int>("availableCapacity")
-                        .HasColumnType("int");
+                    b.Property<string>("availableFacilities")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("roomCapacity")
                         .HasColumnType("int");
@@ -93,6 +94,9 @@ namespace ASI.Basecode.Data.Migrations
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -104,6 +108,9 @@ namespace ASI.Basecode.Data.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()

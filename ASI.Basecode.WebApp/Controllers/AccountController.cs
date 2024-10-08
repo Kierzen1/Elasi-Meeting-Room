@@ -123,7 +123,7 @@ namespace ASI.Basecode.WebApp.Controllers
             try
             {
                 _userService.AddUser(model);
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Login", "Account");
             }
             catch(InvalidDataException ex)
             {

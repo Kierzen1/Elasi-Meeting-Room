@@ -21,7 +21,7 @@ namespace ASI.Basecode.Data.Models
         [Required]
         public int roomCapacity { get; set; }
         [Required]
-        public int availableFacilities { get; set; }
+        public string availableFacilities { get; set; }
         [Required]
         public DateTime DateTimeCreated = DateTime.Now;
     }
