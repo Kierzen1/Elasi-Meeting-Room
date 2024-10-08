@@ -51,6 +51,7 @@ namespace ASI.Basecode.Data.Repositories
             var existingUser = _dbContext.Users.FirstOrDefault(r => r.UserId == user.UserId);
             if (existingUser != null)
             {
+                existingUser.UserId = user.UserId;
                 existingUser.Name = user.Name;
                 existingUser.Email = user.Email;
                 existingUser.Role = user.Role;

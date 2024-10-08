@@ -77,10 +77,11 @@ namespace ASI.Basecode.Data.Migrations
 
             modelBuilder.Entity("ASI.Basecode.Data.Models.User", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -93,9 +94,6 @@ namespace ASI.Basecode.Data.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -121,7 +119,13 @@ namespace ASI.Basecode.Data.Migrations
                     b.Property<DateTime>("UpdatedTime")
                         .HasColumnType("datetime");
 
-                    b.HasKey("UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex(new[] { "UserId" }, "UQ__Users__1788CC4D5F4A160F")
                         .IsUnique();
